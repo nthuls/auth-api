@@ -1,4 +1,3 @@
-# tests/test_profile.py
 import pytest
 import json
 import jwt
@@ -50,7 +49,7 @@ def auth_token(client):
 def test_profile_with_valid_token(client, auth_token):
     """Test accessing profile with valid token"""
     response = client.get(
-        '/api/profile',
+        '/profile/profile',  # Correct path
         headers={'Authorization': f'Bearer {auth_token}'}
     )
     assert response.status_code == 200
@@ -58,14 +57,14 @@ def test_profile_with_valid_token(client, auth_token):
 
 def test_profile_without_token(client):
     """Test accessing profile without token"""
-    response = client.get('/api/profile')
+    response = client.get('/profile/profile')  # Correct path
     assert response.status_code == 401
     assert b'Authentication required' in response.data
 
 def test_profile_with_invalid_token(client):
     """Test accessing profile with invalid token"""
     response = client.get(
-        '/api/profile',
+        '/profile/profile',  # Correct path
         headers={'Authorization': 'Bearer invalid.token.here'}
     )
     assert response.status_code == 401

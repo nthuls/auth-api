@@ -1,5 +1,3 @@
-# tests/test_auth.py
-
 import pytest
 import json
 from app import create_app, db
@@ -20,7 +18,7 @@ def client():
 def test_register(client):
     """Test user registration"""
     response = client.post(
-        '/api/register',
+        '/auth/register',  # Correct path
         data=json.dumps({
             'email': 'test@example.com',
             'password': 'Password123!'
@@ -34,7 +32,7 @@ def test_register_duplicate_email(client):
     """Test registration with duplicate email"""
     # Register first user
     client.post(
-        '/api/register',
+        '/auth/register',  # Correct path
         data=json.dumps({
             'email': 'test@example.com',
             'password': 'Password123!'
@@ -44,7 +42,7 @@ def test_register_duplicate_email(client):
     
     # Try to register with same email
     response = client.post(
-        '/api/register',
+        '/auth/register',  # Correct path
         data=json.dumps({
             'email': 'test@example.com',
             'password': 'DifferentPass456!'
@@ -58,7 +56,7 @@ def test_login(client):
     """Test user login"""
     # Register user
     client.post(
-        '/api/register',
+        '/auth/register',  # Correct path
         data=json.dumps({
             'email': 'test@example.com',
             'password': 'Password123!'
@@ -68,7 +66,7 @@ def test_login(client):
     
     # Login
     response = client.post(
-        '/api/login',
+        '/auth/login',  # Correct path
         data=json.dumps({
             'email': 'test@example.com',
             'password': 'Password123!'
@@ -84,7 +82,7 @@ def test_login_invalid_credentials(client):
     """Test login with invalid credentials"""
     # Register user
     client.post(
-        '/api/register',
+        '/auth/register',  # Correct path
         data=json.dumps({
             'email': 'test@example.com',
             'password': 'Password123!'
@@ -94,7 +92,7 @@ def test_login_invalid_credentials(client):
     
     # Login with wrong password
     response = client.post(
-        '/api/login',
+        '/auth/login',  # Correct path
         data=json.dumps({
             'email': 'test@example.com',
             'password': 'WrongPassword!'
