@@ -87,14 +87,14 @@ class Login(Resource):
             return {'message': 'Invalid credentials'}, 401
         
         # Generate expiration time
-        exp_time = datetime.datetime.utcnow() + datetime.timedelta(seconds=Config.JWT_EXPIRATION_DELTA)
+        exp_time = datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=Config.JWT_EXPIRATION_DELTA)
         
         # Generate JWT token
         token = jwt.encode(
             {
                 'sub': user.id,
                 'email': user.email,
-                'iat': datetime.datetime.utcnow(),
+                'iat': datetime.datetime.now(datetime.UTC),
                 'exp': exp_time
             },
             Config.JWT_SECRET_KEY,

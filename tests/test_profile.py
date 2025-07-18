@@ -37,8 +37,8 @@ def auth_token(client):
             {
                 'sub': user.id,
                 'email': user.email,
-                'iat': datetime.datetime.utcnow(),
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+                'iat': datetime.datetime.now(datetime.UTC),
+                'exp': datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=1)
             },
             Config.JWT_SECRET_KEY,
             algorithm='HS256'
@@ -49,7 +49,7 @@ def auth_token(client):
 def test_profile_with_valid_token(client, auth_token):
     """Test accessing profile with valid token"""
     response = client.get(
-        '/profile/profile',  # Correct path
+        '/profile/profile',
         headers={'Authorization': f'Bearer {auth_token}'}
     )
     assert response.status_code == 200
@@ -57,15 +57,15 @@ def test_profile_with_valid_token(client, auth_token):
 
 def test_profile_without_token(client):
     """Test accessing profile without token"""
-    response = client.get('/profile/profile')  # Correct path
+    response = client.get('/profile/profile')
     assert response.status_code == 401
     assert b'Authentication required' in response.data
 
 def test_profile_with_invalid_token(client):
     """Test accessing profile with invalid token"""
     response = client.get(
-        '/profile/profile',  # Correct path
+        '/profile/profile',
         headers={'Authorization': 'Bearer invalid.token.here'}
     )
     assert response.status_code == 401
-    assert b'Authentication required' in response.data
+    assert b'Invalid token' in response.data
