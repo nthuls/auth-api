@@ -1,10 +1,11 @@
 # app/utils/decorators.py
-
 from functools import wraps
-from flask import request, jsonify
-from app.utils.auth_utils import get_user_from_token
+from flask import request, current_app
+import jwt
+from app.models.user import User
 
 def token_required(f):
+    """Decorator to require JWT token for route access"""
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
